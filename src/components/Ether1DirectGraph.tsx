@@ -78,7 +78,17 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
         </div>
       </div>
 
-      {failed ? (
+      {mode === "page" ? (
+        <div className="mt-4 overflow-hidden rounded-xl border border-border/70 bg-card">
+          <iframe
+            key={stamp}
+            src={`${PAGE_URL}?t=${stamp}`}
+            title="Halaman MRTG graphs lengkap"
+            className="h-[520px] w-full border-0 bg-white"
+            loading="lazy"
+          />
+        </div>
+      ) : failed ? (
         <div className="mt-4 rounded-xl border border-dashed border-border p-5 text-center">
           <ImageOff className="mx-auto h-6 w-6 text-muted-foreground" />
           <p className="mt-2 text-sm text-muted-foreground">
