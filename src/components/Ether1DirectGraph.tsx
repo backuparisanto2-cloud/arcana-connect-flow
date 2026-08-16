@@ -83,8 +83,8 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
           <iframe
             key={stamp}
             src={`${PAGE_URL}?t=${stamp}`}
-            title="Halaman MRTG ether1 harian"
-            className="h-[520px] w-full border-0 bg-white"
+            title="Iframe grafik MRTG ether1 harian"
+            className="h-[260px] w-full border-0 bg-white"
             loading="lazy"
           />
         </div>
