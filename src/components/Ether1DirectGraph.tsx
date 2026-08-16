@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 const PROXY_URL = "/api/mrtg/graphs/iface/ether1/daily.gif";
 const UPSTREAM_URL = "http://117.121.207.223:2627/graphs/iface/ether1/daily.gif";
-const PAGE_URL = "/api/mrtg/graphs/";
+const PAGE_URL = "/api/mrtg/graphs/iface/ether1/";
 
 /**
  * Ringkasan grafik MRTG ether1 (harian) yang disematkan langsung dari URL
