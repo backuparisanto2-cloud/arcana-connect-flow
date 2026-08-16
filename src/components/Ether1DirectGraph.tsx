@@ -38,7 +38,7 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
     <section className="card-elevated mt-6 rounded-2xl border border-border p-4 sm:p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="flex items-center gap-2 font-display text-base font-semibold">
-          <LineChart className="h-4 w-4 text-primary" /> Trafik Internet — Ether1 (Harian)
+          <LineChart className="h-4 w-4 text-primary" /> ether1 to Internet (Harian)
         </h3>
         <div className="flex items-center gap-2">
           <button
