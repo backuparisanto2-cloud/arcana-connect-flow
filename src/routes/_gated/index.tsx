@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/SiteHeader";
-import { Ether1Graph } from "@/components/Ether1Graph";
+import { Ether1DirectGraph } from "@/components/Ether1DirectGraph";
 import { StatCard, UsageBar } from "@/components/StatCard";
 import { getRouterStatus } from "@/lib/mikrotik.functions";
 import { formatBytes, formatUptime } from "@/lib/mikrotik-types";
@@ -117,7 +117,7 @@ function Dashboard() {
           </p>
         </section>
 
-        <Ether1Graph refreshKey={status?.checkedAt ? new Date(status.checkedAt).getTime() : 0} />
+        <Ether1DirectGraph refreshKey={status?.checkedAt ? new Date(status.checkedAt).getTime() : 0} />
 
 
 
