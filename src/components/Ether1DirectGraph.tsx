@@ -74,7 +74,7 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
             Router MRTG mungkin sedang tidak dapat dijangkau dari server.
           </p>
           <a
-            href={DIRECT_URL}
+            href={UPSTREAM_URL}
             target="_blank"
             rel="noreferrer"
             className="mx-auto mt-3 inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary"
