@@ -88,57 +88,45 @@ export const syncDevicesFromBindings = createServerFn({ method: "POST" }).handle
 
   const { fetchIpBindings } = await import("./mikrotik-binding.server");
   const result = await fetchIpBindings();
-  if (!result.ok) return { ok: false as const, error: result.error, created: 0, updated: 0 };
+  if (!result.ok) return { ok: false as const, error: result.error, created: 0, skipped: 0 };
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: existing, error: readError } = await supabaseAdmin
     .from("devices")
     .select("id, name, mac_address, ip_address, notes");
-  if (readError) return { ok: false as const, error: readError.message, created: 0, updated: 0 };
+  if (readError) return { ok: false as const, error: readError.message, created: 0, skipped: 0 };
 
-  const byMac = new Map<string, (typeof existing)[number]>();
+  const keyOf = (mac: string, ip: string | null) => `${mac.trim().toUpperCase()}|${ip ?? ""}`;
+  const seen = new Set<string>();
   for (const d of existing ?? []) {
-    const mac = d.mac_address?.trim().toUpperCase();
-    if (mac) byMac.set(mac, d);
+    if (d.mac_address) seen.add(keyOf(d.mac_address, d.ip_address ?? null));
   }
 
   const MARK = "Sumber: IP-Binding MikroTik";
   let created = 0;
-  let updated = 0;
+  let skipped = 0;
 
   for (const b of result.bindings) {
     if (!b.macAddress) continue;
     const ip = b.address ?? b.toAddress ?? null;
-    const notes = `${MARK} · tipe ${b.type} · ${b.disabled ? "nonaktif" : "aktif"}`;
-    const name = b.comment ?? b.macAddress;
-    const current = byMac.get(b.macAddress);
-
-    if (!current) {
-      const { error } = await supabaseAdmin.from("devices").insert({
-        name,
-        device_type: "Lainnya",
-        mac_address: b.macAddress,
-        ip_address: ip,
-        notes,
-      });
-      if (!error) created += 1;
+    const key = keyOf(b.macAddress, ip);
+    if (seen.has(key)) {
+      skipped += 1;
       continue;
     }
+    seen.add(key);
 
-    const fromImport = (current.notes ?? "").includes(MARK);
-    const patch: { ip_address: string | null; notes: string; name?: string } = {
+    const { error } = await supabaseAdmin.from("devices").insert({
+      name: b.comment ?? b.macAddress,
+      device_type: "Lainnya",
+      mac_address: b.macAddress,
       ip_address: ip,
-      notes,
-    };
-    if (fromImport && b.comment) patch.name = name;
-    const changed =
-      current.ip_address !== patch.ip_address ||
-      current.notes !== patch.notes ||
-      (patch.name !== undefined && current.name !== patch.name);
-    if (!changed) continue;
-    const { error } = await supabaseAdmin.from("devices").update(patch).eq("id", current.id);
-    if (!error) updated += 1;
+      notes: `${MARK} · tipe ${b.type} · ${b.disabled ? "nonaktif" : "aktif"}`,
+    });
+    if (error) skipped += 1;
+    else created += 1;
   }
 
-  return { ok: true as const, created, updated };
+  return { ok: true as const, created, skipped };
 });
+
