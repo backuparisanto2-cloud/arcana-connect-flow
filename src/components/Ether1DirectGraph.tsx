@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 const PROXY_URL = "/api/mrtg/graphs/iface/ether1/daily.gif";
 const UPSTREAM_URL = "http://117.121.207.223:2627/graphs/iface/ether1/daily.gif";
+const PAGE_URL = "/api/mrtg/graphs/";
 
 /**
  * Ringkasan grafik MRTG ether1 (harian) yang disematkan langsung dari URL
@@ -14,6 +15,7 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
   const [failed, setFailed] = useState(false);
   const [spinning, setSpinning] = useState(false);
   const [useDirect, setUseDirect] = useState(false);
+  const [mode, setMode] = useState<"gif" | "page">("gif");
 
   // Saat data router diperbarui, juga perbarui gambar.
   useEffect(() => {
@@ -42,7 +44,21 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
         <h3 className="flex items-center gap-2 font-display text-base font-semibold">
           <LineChart className="h-4 w-4 text-primary" /> ether1 to Internet (Harian)
         </h3>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex rounded-full border border-border p-0.5">
+            {(["gif", "page"] as const).map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => setMode(m)}
+                className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
+                  mode === m ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-secondary"
+                }`}
+              >
+                {m === "gif" ? "Grafik GIF" : "Halaman penuh"}
+              </button>
+            ))}
+          </div>
           <button
             type="button"
             onClick={handleRefresh}
@@ -51,20 +67,28 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
             <RefreshCw className={`h-3 w-3 ${spinning ? "animate-spin" : ""}`} /> Segarkan
           </button>
           <span className="hidden text-xs text-muted-foreground sm:inline">MRTG · tiap 60 detik</span>
-          {!failed && (
-            <a
-              href={src}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary"
-            >
-              <ExternalLink className="h-3 w-3" /> Buka gambar penuh
-            </a>
-          )}
+          <a
+            href={mode === "gif" ? src : PAGE_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary"
+          >
+            <ExternalLink className="h-3 w-3" /> Buka di tab baru
+          </a>
         </div>
       </div>
 
-      {failed ? (
+      {mode === "page" ? (
+        <div className="mt-4 overflow-hidden rounded-xl border border-border/70 bg-card">
+          <iframe
+            key={stamp}
+            src={`${PAGE_URL}?t=${stamp}`}
+            title="Halaman MRTG graphs lengkap"
+            className="h-[520px] w-full border-0 bg-white"
+            loading="lazy"
+          />
+        </div>
+      ) : failed ? (
         <div className="mt-4 rounded-xl border border-dashed border-border p-5 text-center">
           <ImageOff className="mx-auto h-6 w-6 text-muted-foreground" />
           <p className="mt-2 text-sm text-muted-foreground">
