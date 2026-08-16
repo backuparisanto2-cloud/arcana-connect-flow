@@ -55,7 +55,7 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
                   mode === m ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-secondary"
                 }`}
               >
-                {m === "gif" ? "Grafik GIF" : "Halaman penuh"}
+                {m === "gif" ? "Grafik GIF" : "Halaman iframe"}
               </button>
             ))}
           </div>
