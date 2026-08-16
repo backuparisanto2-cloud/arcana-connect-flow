@@ -117,7 +117,7 @@ function Dashboard() {
           </p>
         </section>
 
-        <Ether1Graph refreshKey={status?.checkedAt ? new Date(status.checkedAt).getTime() : 0} />
+        <Ether1DirectGraph refreshKey={status?.checkedAt ? new Date(status.checkedAt).getTime() : 0} />
 
 
 
