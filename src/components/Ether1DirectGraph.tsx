@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 const PROXY_URL = "/api/mrtg/graphs/iface/ether1/daily.gif";
 const UPSTREAM_URL = "http://117.121.207.223:2627/graphs/iface/ether1/daily.gif";
-const PAGE_URL = "/api/mrtg/graphs/";
+const PAGE_URL = "/api/mrtg/graphs/iface/ether1/daily.gif";
 
 /**
  * Ringkasan grafik MRTG ether1 (harian) yang disematkan langsung dari URL
@@ -15,7 +15,7 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
   const [failed, setFailed] = useState(false);
   const [spinning, setSpinning] = useState(false);
   const [useDirect, setUseDirect] = useState(false);
-  const [mode, setMode] = useState<"gif" | "page">("gif");
+  const [mode, setMode] = useState<"gif" | "page">("page");
 
   // Saat data router diperbarui, juga perbarui gambar.
   useEffect(() => {
@@ -55,7 +55,7 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
                   mode === m ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-secondary"
                 }`}
               >
-                {m === "gif" ? "Grafik GIF" : "Halaman penuh"}
+                {m === "gif" ? "Grafik GIF" : "Iframe grafik"}
               </button>
             ))}
           </div>
@@ -83,8 +83,8 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
           <iframe
             key={stamp}
             src={`${PAGE_URL}?t=${stamp}`}
-            title="Halaman MRTG graphs lengkap"
-            className="h-[520px] w-full border-0 bg-white"
+            title="Iframe grafik MRTG ether1 harian"
+            className="h-[260px] w-full border-0 bg-white"
             loading="lazy"
           />
         </div>
