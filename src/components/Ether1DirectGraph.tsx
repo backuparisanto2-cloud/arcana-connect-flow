@@ -42,7 +42,21 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
         <h3 className="flex items-center gap-2 font-display text-base font-semibold">
           <LineChart className="h-4 w-4 text-primary" /> ether1 to Internet (Harian)
         </h3>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex rounded-full border border-border p-0.5">
+            {(["gif", "page"] as const).map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => setMode(m)}
+                className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
+                  mode === m ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-secondary"
+                }`}
+              >
+                {m === "gif" ? "Grafik GIF" : "Halaman penuh"}
+              </button>
+            ))}
+          </div>
           <button
             type="button"
             onClick={handleRefresh}
