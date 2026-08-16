@@ -83,14 +83,17 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
       ) : (
         <div className="mt-4 overflow-x-auto rounded-xl border border-border/70 bg-card p-3">
           <img
-            key={stamp}
+            key={`${stamp}-${useDirect}`}
             src={src}
-            alt="Grafik trafik harian interface ether1"
+            alt="Grafik trafik harian interface ether1 ke Internet"
             width={500}
             height={170}
-            onError={() => setFailed(true)}
+            onError={() => {
+              if (!useDirect) setUseDirect(true);
+              else setFailed(true);
+            }}
             style={{ imageRendering: "pixelated" }}
-            className="mx-auto block h-[170px] w-[500px] max-w-none"
+            className="mx-auto block h-auto w-full min-w-[320px] max-w-[500px]"
           />
         </div>
       )}
