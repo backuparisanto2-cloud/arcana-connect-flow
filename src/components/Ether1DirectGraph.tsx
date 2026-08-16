@@ -1,7 +1,8 @@
 import { ExternalLink, ImageOff, LineChart, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const DIRECT_URL = "/api/mrtg/graphs/iface/ether1/daily.gif";
+const PROXY_URL = "/api/mrtg/graphs/iface/ether1/daily.gif";
+const UPSTREAM_URL = "http://117.121.207.223:2627/graphs/iface/ether1/daily.gif";
 
 /**
  * Ringkasan grafik MRTG ether1 (harian) yang disematkan langsung dari URL
@@ -12,6 +13,7 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
   const [stamp, setStamp] = useState(() => Date.now());
   const [failed, setFailed] = useState(false);
   const [spinning, setSpinning] = useState(false);
+  const [useDirect, setUseDirect] = useState(false);
 
   // Saat data router diperbarui, juga perbarui gambar.
   useEffect(() => {
@@ -32,7 +34,7 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
     window.setTimeout(() => setSpinning(false), 1200);
   };
 
-  const src = `${DIRECT_URL}?t=${stamp}`;
+  const src = `${useDirect ? UPSTREAM_URL : PROXY_URL}?t=${stamp}`;
 
   return (
     <section className="card-elevated mt-6 rounded-2xl border border-border p-4 sm:p-5">
@@ -72,7 +74,7 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
             Router MRTG mungkin sedang tidak dapat dijangkau dari server.
           </p>
           <a
-            href={DIRECT_URL}
+            href={UPSTREAM_URL}
             target="_blank"
             rel="noreferrer"
             className="mx-auto mt-3 inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary"
@@ -83,14 +85,17 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
       ) : (
         <div className="mt-4 overflow-x-auto rounded-xl border border-border/70 bg-card p-3">
           <img
-            key={stamp}
+            key={`${stamp}-${useDirect}`}
             src={src}
-            alt="Grafik trafik harian interface ether1"
+            alt="Grafik trafik harian interface ether1 ke Internet"
             width={500}
             height={170}
-            onError={() => setFailed(true)}
+            onError={() => {
+              if (!useDirect) setUseDirect(true);
+              else setFailed(true);
+            }}
             style={{ imageRendering: "pixelated" }}
-            className="mx-auto block h-[170px] w-[500px] max-w-none"
+            className="mx-auto block h-auto w-full min-w-[320px] max-w-[500px]"
           />
         </div>
       )}
