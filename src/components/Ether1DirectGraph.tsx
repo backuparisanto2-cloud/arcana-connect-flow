@@ -66,16 +66,14 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
             <RefreshCw className={`h-3 w-3 ${spinning ? "animate-spin" : ""}`} /> Segarkan
           </button>
           <span className="hidden text-xs text-muted-foreground sm:inline">MRTG · tiap 60 detik</span>
-          {!failed && (
-            <a
-              href={src}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary"
-            >
-              <ExternalLink className="h-3 w-3" /> Buka gambar penuh
-            </a>
-          )}
+          <a
+            href={mode === "gif" ? src : PAGE_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary"
+          >
+            <ExternalLink className="h-3 w-3" /> Buka di tab baru
+          </a>
         </div>
       </div>
 
