@@ -16,6 +16,7 @@ import { Route as GatedGraphRouteImport } from './routes/_gated/graph'
 import { Route as GatedHotspotRouteImport } from './routes/_gated/hotspot'
 import { Route as GatedPerangkatRouteImport } from './routes/_gated/perangkat'
 import { Route as ApiGraphEther1DotgifRouteImport } from './routes/api/graph/ether1[.]gif'
+import { Route as ApiMrtgSplatRouteImport } from './routes/api/mrtg/$'
 
 const GatedRouteRoute = GatedRouteRouteImport.update({
   id: '/_gated',
@@ -51,6 +52,11 @@ const ApiGraphEther1DotgifRoute = ApiGraphEther1DotgifRouteImport.update({
   path: '/api/graph/ether1.gif',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMrtgSplatRoute = ApiMrtgSplatRouteImport.update({
+  id: '/api/mrtg/$',
+  path: '/api/mrtg/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof GatedIndexRoute
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/hotspot': typeof GatedHotspotRoute
   '/perangkat': typeof GatedPerangkatRoute
   '/api/graph/ether1.gif': typeof ApiGraphEther1DotgifRoute
+  '/api/mrtg/$': typeof ApiMrtgSplatRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/perangkat': typeof GatedPerangkatRoute
   '/': typeof GatedIndexRoute
   '/api/graph/ether1.gif': typeof ApiGraphEther1DotgifRoute
+  '/api/mrtg/$': typeof ApiMrtgSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/_gated/perangkat': typeof GatedPerangkatRoute
   '/_gated/': typeof GatedIndexRoute
   '/api/graph/ether1.gif': typeof ApiGraphEther1DotgifRoute
+  '/api/mrtg/$': typeof ApiMrtgSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/hotspot'
     | '/perangkat'
     | '/api/graph/ether1.gif'
+    | '/api/mrtg/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
     | '/perangkat'
     | '/'
     | '/api/graph/ether1.gif'
+    | '/api/mrtg/$'
   id:
     | '__root__'
     | '/_gated'
@@ -104,12 +115,14 @@ export interface FileRouteTypes {
     | '/_gated/perangkat'
     | '/_gated/'
     | '/api/graph/ether1.gif'
+    | '/api/mrtg/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   GatedRouteRoute: typeof GatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ApiGraphEther1DotgifRoute: typeof ApiGraphEther1DotgifRoute
+  ApiMrtgSplatRoute: typeof ApiMrtgSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -163,6 +176,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiGraphEther1DotgifRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/mrtg/$': {
+      id: '/api/mrtg/$'
+      path: '/api/mrtg/$'
+      fullPath: '/api/mrtg/$'
+      preLoaderRoute: typeof ApiMrtgSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -188,6 +208,7 @@ const rootRouteChildren: RootRouteChildren = {
   GatedRouteRoute: GatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ApiGraphEther1DotgifRoute: ApiGraphEther1DotgifRoute,
+  ApiMrtgSplatRoute: ApiMrtgSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

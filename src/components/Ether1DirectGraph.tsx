@@ -1,12 +1,12 @@
 import { ExternalLink, ImageOff, LineChart, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const DIRECT_URL = "http://117.121.207.223:2627/graphs/iface/ether1/daily.gif";
+const DIRECT_URL = "/api/mrtg/graphs/iface/ether1/daily.gif";
 
 /**
  * Ringkasan grafik MRTG ether1 (harian) yang disematkan langsung dari URL
- * publik router. Karena URL ini HTTP, gambar bisa diblokir oleh browser bila
- * halaman aplikasi diakses via HTTPS — maka ada fallback dengan penjelasan.
+ * publik router. Diambil lewat reverse proxy HTTPS (/api/mrtg) agar tidak
+ * terkena mixed content.
  */
 export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
   const [stamp, setStamp] = useState(() => Date.now());
@@ -69,7 +69,7 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
             Gambar MRTG tidak dapat dimuat langsung di halaman ini.
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Penyebab umum: browser memblokir konten HTTP pada halaman HTTPS.
+            Router MRTG mungkin sedang tidak dapat dijangkau dari server.
           </p>
           <a
             href={DIRECT_URL}
