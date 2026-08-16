@@ -34,7 +34,7 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
     window.setTimeout(() => setSpinning(false), 1200);
   };
 
-  const src = `${DIRECT_URL}?t=${stamp}`;
+  const src = `${useDirect ? UPSTREAM_URL : PROXY_URL}?t=${stamp}`;
 
   return (
     <section className="card-elevated mt-6 rounded-2xl border border-border p-4 sm:p-5">
