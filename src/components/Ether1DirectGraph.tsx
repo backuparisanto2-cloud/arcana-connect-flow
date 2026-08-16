@@ -13,6 +13,7 @@ export function Ether1DirectGraph({ refreshKey }: { refreshKey?: number }) {
   const [stamp, setStamp] = useState(() => Date.now());
   const [failed, setFailed] = useState(false);
   const [spinning, setSpinning] = useState(false);
+  const [useDirect, setUseDirect] = useState(false);
 
   // Saat data router diperbarui, juga perbarui gambar.
   useEffect(() => {
