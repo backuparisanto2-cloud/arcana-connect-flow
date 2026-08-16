@@ -108,7 +108,7 @@ function DevicesPage() {
     queryKey: ["devices-binding-sync"],
     queryFn: async () => {
       const res = await runSync();
-      if (res.ok && (res.created > 0 || res.updated > 0)) {
+      if (res.ok && (res.created > 0)) {
         await queryClient.invalidateQueries({ queryKey: ["devices"] });
       }
       return res;
@@ -122,7 +122,7 @@ function DevicesPage() {
   const manualSync = useMutation({
     mutationFn: async () => {
       const res = await runSync();
-      if (res.ok && (res.created > 0 || res.updated > 0)) {
+      if (res.ok && (res.created > 0)) {
         await queryClient.invalidateQueries({ queryKey: ["devices"] });
       }
       return res;
@@ -201,11 +201,11 @@ function DevicesPage() {
               {manualSync.isPending || sync.isFetching
                 ? "Menyinkronkan IP-Binding dari MikroTik…"
                 : manualSync.data?.ok
-                  ? `Sinkron dari MikroTik: ${manualSync.data.created} baru, ${manualSync.data.updated} diperbarui.`
+                  ? `Sinkron dari MikroTik: ${manualSync.data.created} baru, ${manualSync.data.skipped} dilewati.`
                   : manualSync.data
                     ? `Sinkron MikroTik gagal: ${manualSync.data.error}`
                     : sync.data?.ok
-                      ? `Sinkron dari MikroTik: ${sync.data.created} baru, ${sync.data.updated} diperbarui.`
+                      ? `Sinkron dari MikroTik: ${sync.data.created} baru, ${sync.data.skipped} dilewati.`
                       : sync.data
                         ? `Sinkron MikroTik gagal: ${sync.data.error}`
                         : sync.isError
